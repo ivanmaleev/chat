@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.entity.Role;
-import ru.job4j.chat.entity.Room;
 import ru.job4j.chat.service.RoleService;
 
 import java.util.Optional;
@@ -27,10 +26,11 @@ public class RoleController {
         if (role.getName() == null) {
             throw new NullPointerException("Role name mustn't be empty");
         }
-        return new ResponseEntity<>(
-                this.roleService.save(role),
-                HttpStatus.CREATED
-        );
+        role = this.roleService.save(role);
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .contentLength(role.toString().length())
+                .body(role);
     }
 
     @GetMapping("/{id}")
@@ -40,6 +40,9 @@ public class RoleController {
                 new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "Role is not found. Please, check requisites."
                 ));
-        return new ResponseEntity<>(role, HttpStatus.OK);
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .contentLength(role.toString().length())
+                .body(role);
     }
 }
