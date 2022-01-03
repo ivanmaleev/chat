@@ -3,12 +3,15 @@ package ru.job4j.chat.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.entity.Person;
 import ru.job4j.chat.entity.Role;
 import ru.job4j.chat.service.PersonService;
+import ru.job4j.chat.validation.Operation;
 
+import javax.validation.Valid;
 import java.util.Optional;
 
 @RestController
@@ -23,10 +26,8 @@ public class PersonController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Person> create(@RequestBody Person person) {
-        if (person.getLogin() == null || person.getPassword() == null) {
-            throw new NullPointerException("Username and password mustn't be empty");
-        }
+    @Validated(Operation.OnCreate.class)
+    public ResponseEntity<Person> create(@RequestBody @Valid Person person) {
         return new ResponseEntity<>(
                 this.personService.save(person),
                 HttpStatus.CREATED

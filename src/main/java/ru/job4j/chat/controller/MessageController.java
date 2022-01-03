@@ -6,14 +6,17 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.entity.Message;
 import ru.job4j.chat.entity.Person;
 import ru.job4j.chat.service.MessageService;
+import ru.job4j.chat.validation.Operation;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Optional;
@@ -46,11 +49,8 @@ public class MessageController {
     }
 
     @PostMapping("/")
-    public ResponseEntity<Message> create(@RequestBody Message message) {
-        if ("".equals(message.getText()) || message.getText() == null) {
-            throw new IllegalArgumentException("Сообщение не должно быть пустым");
-
-        }
+    @Validated(Operation.OnCreate.class)
+    public ResponseEntity<Message> create(@RequestBody @Valid Message message) {
         return new ResponseEntity<>(
                 this.messageService.save(message),
                 HttpStatus.CREATED
@@ -58,11 +58,7 @@ public class MessageController {
     }
 
     @PutMapping("/")
-    public ResponseEntity<Void> update(@RequestBody Message message) {
-        if ("".equals(message.getText()) || message.getText() == null) {
-            throw new IllegalArgumentException("Сообщение не должно быть пустым");
-
-        }
+    public ResponseEntity<Void> update(@RequestBody @Valid Message message) {
         messageService.save(message);
         return ResponseEntity.ok().build();
     }
