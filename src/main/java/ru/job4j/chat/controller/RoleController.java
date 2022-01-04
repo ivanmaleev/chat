@@ -6,11 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ru.job4j.chat.common.Common;
+import ru.job4j.chat.entity.Person;
 import ru.job4j.chat.entity.Role;
 import ru.job4j.chat.service.RoleService;
 import ru.job4j.chat.validation.Operation;
 
 import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 @RestController
@@ -45,5 +48,14 @@ public class RoleController {
                 .status(HttpStatus.OK)
                 .contentLength(role.toString().length())
                 .body(role);
+    }
+
+    @PatchMapping("/")
+    public Role patch(@RequestBody Role role)
+            throws InvocationTargetException, IllegalAccessException {
+        var currentRole = roleService.findById(role.getId()).orElse(null);
+        Common.patch(role, currentRole);
+        roleService.save(role);
+        return currentRole;
     }
 }

@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ru.job4j.chat.common.Common;
 import ru.job4j.chat.entity.Message;
 import ru.job4j.chat.entity.Person;
+import ru.job4j.chat.entity.Room;
 import ru.job4j.chat.service.MessageService;
 import ru.job4j.chat.validation.Operation;
 
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Optional;
 
@@ -69,6 +73,15 @@ public class MessageController {
         message.setId(id);
         messageService.delete(message);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    public Message patch(@RequestBody Message message)
+            throws InvocationTargetException, IllegalAccessException {
+        var currentMessage = messageService.findById(message.getId()).orElse(null);
+        Common.patch(message, currentMessage);
+        messageService.save(message);
+        return currentMessage;
     }
 
     @ExceptionHandler(value = {IllegalArgumentException.class})

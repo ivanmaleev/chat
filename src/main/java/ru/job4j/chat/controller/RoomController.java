@@ -6,12 +6,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ru.job4j.chat.common.Common;
 import ru.job4j.chat.entity.Room;
 import ru.job4j.chat.service.RoomService;
 import ru.job4j.chat.validation.Operation;
 
 import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
@@ -61,5 +65,14 @@ public class RoomController {
         room.setId(id);
         roomService.delete(room);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    public Room patch(@RequestBody Room room)
+            throws InvocationTargetException, IllegalAccessException {
+        var currentRoom = roomService.findById(room.getId()).orElse(null);
+        Common.patch(room, currentRoom);
+        roomService.save(room);
+        return currentRoom;
     }
 }

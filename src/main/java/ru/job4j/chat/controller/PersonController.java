@@ -6,12 +6,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import ru.job4j.chat.common.Common;
+import ru.job4j.chat.entity.Message;
 import ru.job4j.chat.entity.Person;
 import ru.job4j.chat.entity.Role;
 import ru.job4j.chat.service.PersonService;
 import ru.job4j.chat.validation.Operation;
 
 import javax.validation.Valid;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Optional;
 
 @RestController
@@ -42,5 +45,14 @@ public class PersonController {
                         HttpStatus.NOT_FOUND, "Account is not found. Please, check requisites."
                 ));
         return new ResponseEntity<>(person, HttpStatus.OK);
+    }
+
+    @PatchMapping("/")
+    public Person patch(@RequestBody Person person)
+            throws InvocationTargetException, IllegalAccessException {
+        var currentPerson = personService.findById(person.getId()).orElse(null);
+        Common.patch(person, currentPerson);
+        personService.save(person);
+        return currentPerson;
     }
 }
