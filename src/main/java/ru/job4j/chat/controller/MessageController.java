@@ -1,9 +1,9 @@
 package ru.job4j.chat.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.common.Common;
 import ru.job4j.chat.entity.Message;
-import ru.job4j.chat.entity.Person;
-import ru.job4j.chat.entity.Room;
 import ru.job4j.chat.service.MessageService;
 import ru.job4j.chat.validation.Operation;
 
@@ -21,26 +19,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/message")
+@AllArgsConstructor
 public class MessageController {
 
     private static final Logger LOGGER = LoggerFactory.
             getLogger(UserController.class.getSimpleName());
 
-    @Autowired
     private MessageService messageService;
-    @Autowired
     private final ObjectMapper objectMapper;
-
-    public MessageController(MessageService messageService, ObjectMapper objectMapper) {
-        this.messageService = messageService;
-        this.objectMapper = objectMapper;
-    }
 
     @GetMapping("/{id}")
     public ResponseEntity<Message> findById(@PathVariable int id) {

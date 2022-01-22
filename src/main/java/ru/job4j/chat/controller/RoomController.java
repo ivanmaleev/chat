@@ -1,5 +1,6 @@
 package ru.job4j.chat.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,21 +14,15 @@ import ru.job4j.chat.validation.Operation;
 
 import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/room")
+@AllArgsConstructor
 public class RoomController {
 
-    @Autowired
     private RoomService roomService;
-
-    public RoomController(RoomService roomService) {
-        this.roomService = roomService;
-    }
 
     @GetMapping("/")
     public Collection<Room> findAllRooms() {

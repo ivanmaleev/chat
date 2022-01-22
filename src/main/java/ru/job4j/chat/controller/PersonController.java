@@ -1,5 +1,6 @@
 package ru.job4j.chat.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -7,9 +8,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.common.Common;
-import ru.job4j.chat.entity.Message;
 import ru.job4j.chat.entity.Person;
-import ru.job4j.chat.entity.Role;
 import ru.job4j.chat.service.PersonService;
 import ru.job4j.chat.validation.Operation;
 
@@ -19,14 +18,10 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/person")
+@AllArgsConstructor
 public class PersonController {
 
-    @Autowired
     private PersonService personService;
-
-    public PersonController(PersonService personService) {
-        this.personService = personService;
-    }
 
     @PostMapping("/")
     @Validated(Operation.OnCreate.class)

@@ -1,5 +1,6 @@
 package ru.job4j.chat.controller;
 
+import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import ru.job4j.chat.entity.Person;
@@ -10,16 +11,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
+@AllArgsConstructor
 public class UserController {
 
     private UserStore users;
     private BCryptPasswordEncoder encoder;
-
-    public UserController(UserStore users,
-                          BCryptPasswordEncoder encoder) {
-        this.users = users;
-        this.encoder = encoder;
-    }
 
     @PostMapping("/sign-up")
     public void signUp(@RequestBody @Valid Person person) {

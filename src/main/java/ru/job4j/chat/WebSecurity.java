@@ -13,7 +13,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.context.annotation.Bean;
 import ru.job4j.chat.filter.JWTAuthenticationFilter;
 import ru.job4j.chat.filter.JWTAuthorizationFilter;
-import ru.job4j.chat.service.UserDetailsServiceImpl;
+import ru.job4j.chat.service.impl.UserDetailsServiceImpl;
 
 import static ru.job4j.chat.filter.JWTAuthenticationFilter.SIGN_UP_URL;
 
